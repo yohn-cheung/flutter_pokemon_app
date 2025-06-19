@@ -6,11 +6,35 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiService {
-  final baseUrl = dotenv.env['URL'];
+  // final baseUrl = dotenv.env['URL'];
+  final String baseUrl = 'http://127.0.0.1:8000/api';
 
-  Future<List<Pokemon>> fetchPokemons() async {
+  Future<List<Pokemon>> fetchPokemons({
+    int? regionId,
+    int? typeId,
+    String? search,
+  }) async {
+    Map<String, String> queryParams = {};
+
+    if (regionId != null) {
+      queryParams['region'] = regionId.toString();
+    }
+    if (typeId != null) {
+      queryParams['type'] = typeId.toString();
+    }
+
+    if (search != null) {
+      queryParams['search'] = search;
+    }
+
+    final Uri uri = Uri.http(
+      '127.0.0.1:8000', // e.g. 'api.example.com'
+      '/api/v1/pokemons',
+      queryParams,
+    );
+
     final http.Response response = await http.get(
-      Uri.parse('$baseUrl/v1/pokemons'),
+      uri,
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -74,6 +98,23 @@ class ApiService {
       // Ignore errors, fall through to return placeholder
     }
     // return 'https://placehold.co/50x50';
-    return 'https://picsum.photos/250?image=9';
+    // return 'https://picsum.photos/250?image=9';
+    return 'https://placehold.co/400';
+  }
+
+  Future<Pokemon> getPokemonDetails(int id) async {
+    final http.Response response = await http.get(
+      Uri.parse('$baseUrl/v1/pokemons/$id'),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    final Map<String, dynamic> json = jsonDecode(response.body);
+
+    if (json['data'] == null) throw Exception("API response missing 'data'");
+
+    return Pokemon.fromJson(json['data']);
   }
 }
