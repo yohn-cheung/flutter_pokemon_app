@@ -46,7 +46,13 @@ class Pokemon {
 
       // typeOne: Type.fromJson(json['typeOne']),
       // typeTwo: Type.fromJson(json['typeTwo']),
-      region: Region.fromJson(json['region']),
+      region: json['region'] != null ? Region.fromJson(json['region']) : null,
+
+      description:
+          json['description'] != null
+              ? Description.fromJson(json['description'])
+              : null,
+      stats: json['stats'] != null ? Stats.fromJson(json['stats']) : null,
     );
   }
 }
