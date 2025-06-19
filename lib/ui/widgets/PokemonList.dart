@@ -47,7 +47,9 @@ class _PokemonlistState extends State<Pokemonlist> {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Detailscreen()),
+              MaterialPageRoute(
+                builder: (context) => Detailscreen(id: pokemon.id),
+              ),
             );
           },
           child: Padding(
@@ -57,7 +59,9 @@ class _PokemonlistState extends State<Pokemonlist> {
                 Image.network(
                   // 'https://picsum.photos/250?image=9',
                   // 'https://img.pokemondb.net/artwork/${pokemon.name.toLowerCase()}.jpg',
-                  pokemon.imageUrl ?? 'https://picsum.photos/250?image=9',
+                  // pokemon.imageUrl ?? 'https://picsum.photos/250?image=9',
+                  // 'https://placehold.co/10x10',
+                  'https://picsum.photos/250?image=9',
                   width: 50,
                   height: 50,
                   fit: BoxFit.contain,
